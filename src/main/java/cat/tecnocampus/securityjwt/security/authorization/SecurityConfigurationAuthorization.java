@@ -53,6 +53,13 @@ public class SecurityConfigurationAuthorization {
                     auth.requestMatchers("/helloAdmin").access(hasScope("ADMIN"));
                     auth.requestMatchers("/helloUserAdmin").access(hasAnyScope("USER", "ADMIN"));
                     auth.anyRequest().authenticated();
+                    auth.requestMatchers("/createUser").permitAll();
+                    auth.requestMatchers("/helloMe").permitAll();
+                    auth.requestMatchers("/moderator").hasAuthority("MODERATOR");
+                    auth.requestMatchers("/moderator/**").hasAuthority("MODERATOR");
+                    auth.requestMatchers("/moderator/*/admin").hasAnyAuthority("ADMIN", "MODERATOR");
+
+
                 })
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt((jwt) -> jwt.decoder(jwtDecoder)))
